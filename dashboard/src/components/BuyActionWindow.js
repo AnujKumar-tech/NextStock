@@ -12,7 +12,7 @@ const BuyActionWindow = ({ uid }) => {
 
   const handleBuyClick = async () => {
     try {
-      await axios.post("http://localhost:3002/newOrder", {
+      await axios.post("https://nextstock-2.onrender.com/order/newOrders", {
         name: uid,
         qty: stockQuantity,
         price: stockPrice,
@@ -35,7 +35,7 @@ const BuyActionWindow = ({ uid }) => {
       const dayChange = 0.0;
       const isLoss = false;
 
-      await axios.post("http://localhost:3002/newOrder", {
+      await axios.post("https://nextstock-2.onrender.com/holding/newHoldings", {
         name: uid,
         qty: stockQuantity,
         avg: avgCost,

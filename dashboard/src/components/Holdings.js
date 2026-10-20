@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from "react";
-import axios, { all } from "axios";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { VerticalGraph } from "./VerticalGraph";
 
-// import { holdings } from "../data/data";
-
-const Holdings = () => {
-  const [allHoldings, setAllHoldings] = useState([]);
+function Holdings() {
+  const [allHoldings, setallHoldings] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:3002/allHoldings").then((res) => {
-      // console.log(res.data);
-      setAllHoldings(res.data);
-    });
+    axios
+      .get("https://nextstock-2.onrender.com/holding/newHoldings")
+      .then((res) => {
+        setallHoldings(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.error("Error fetching holdings:", err);
+      });
   }, []);
 
-  // const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
   const labels = allHoldings.map((subArray) => subArray["name"]);
 
   const data = {
@@ -28,25 +30,9 @@ const Holdings = () => {
     ],
   };
 
-  // export const data = {
-  //   labels,
-  //   datasets: [
-  // {
-  //   label: 'Dataset 1',
-  //   data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-  //   backgroundColor: 'rgba(255, 99, 132, 0.5)',
-  // },
-  //     {
-  //       label: 'Dataset 2',
-  //       data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-  //       backgroundColor: 'rgba(53, 162, 235, 0.5)',
-  //     },
-  //   ],
-  // };
-
   return (
     <>
-      <h3 className="title">Holdings ({allHoldings.length})</h3>
+      <h3 className="title">Holdings({allHoldings.length}) </h3>
 
       <div className="order-table">
         <table>
@@ -62,8 +48,8 @@ const Holdings = () => {
           </tr>
 
           {allHoldings.map((stock, index) => {
-            const curValue = stock.price * stock.qty;
-            const isProfit = curValue - stock.avg * stock.qty >= 0.0;
+            const currVal = stock.price * stock.qty;
+            const isProfit = currVal - stock.avg * stock.qty >= 0.0;
             const profClass = isProfit ? "profit" : "loss";
             const dayClass = stock.isLoss ? "loss" : "profit";
 
@@ -73,9 +59,9 @@ const Holdings = () => {
                 <td>{stock.qty}</td>
                 <td>{stock.avg.toFixed(2)}</td>
                 <td>{stock.price.toFixed(2)}</td>
-                <td>{curValue.toFixed(2)}</td>
+                <td>{currVal.toFixed(2)}</td>
                 <td className={profClass}>
-                  {(curValue - stock.avg * stock.qty).toFixed(2)}
+                  {(currVal - stock.price * stock.qty).toFixed(2)};
                 </td>
                 <td className={profClass}>{stock.net}</td>
                 <td className={dayClass}>{stock.day}</td>
@@ -106,6 +92,6 @@ const Holdings = () => {
       <VerticalGraph data={data} />
     </>
   );
-};
+}
 
 export default Holdings;

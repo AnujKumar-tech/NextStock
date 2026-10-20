@@ -34,7 +34,7 @@ const Login = () => {
 
     try {
       const data = await axios.post(
-        "http://localhost:3002/auth/signup",
+        "https://nextstock-2.onrender.com/auth/login",
         {
           ...formdata,
         },
@@ -45,7 +45,7 @@ const Login = () => {
       if (success) {
         handleSuccess(message);
         setTimeout(() => {
-          window.location.href = "https://onestock-dashboard.onrender.com/dashboard";
+          window.location.href = "https://nextstock-uyvw.onrender.com";
         }, 2000);
       } else {
         handleError(message);

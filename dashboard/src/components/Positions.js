@@ -1,22 +1,24 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-import { positions } from "../data/data";
+function Positions() {
+  const [allPositions, setallPositions] = useState([]);
 
-const Positions = () => {
-
-  const [allPositions, setAllPositions] = useState([]);
-
-  useEffect(()=>{
-    axios.get("http://localhost:3002/allHoldings").then((res)=>{
-      console.log(res.data);
-      setAllPositions(res.data);
-    });
+  useEffect(() => {
+    axios
+      .get("https://nextstock-2.onrender.com/position/allPositions")
+      .then((res) => {
+        setallPositions(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.error("Error fetching positions:", err);
+      });
   }, []);
 
   return (
     <>
-      <h3 className="title">Positions ({allPositions.length})</h3>
+      <h3 className="title">Positions {allPositions.length}</h3>
 
       <div className="order-table">
         <table>
@@ -31,8 +33,8 @@ const Positions = () => {
           </tr>
 
           {allPositions.map((stock, index) => {
-            const curValue = stock.price * stock.qty;
-            const isProfit = curValue - stock.avg * stock.qty >= 0.0;
+            const currVal = stock.price * stock.qty;
+            const isProfit = currVal - stock.avg * stock.qty >= 0.0;
             const profClass = isProfit ? "profit" : "loss";
             const dayClass = stock.isLoss ? "loss" : "profit";
 
@@ -44,7 +46,7 @@ const Positions = () => {
                 <td>{stock.avg.toFixed(2)}</td>
                 <td>{stock.price.toFixed(2)}</td>
                 <td className={profClass}>
-                  {(curValue - stock.avg * stock.qty).toFixed(2)}
+                  {(currVal - stock.price * stock.qty).toFixed(2)};
                 </td>
                 <td className={dayClass}>{stock.day}</td>
               </tr>
@@ -54,6 +56,6 @@ const Positions = () => {
       </div>
     </>
   );
-};
+}
 
 export default Positions;
