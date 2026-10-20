@@ -1,4 +1,4 @@
-const Holdings = require("../models/HoldingsModel");
+const Holdings = require("../model/HoldingsModel");
 
 module.exports.allHoldings = async (req, res) => {
   try {

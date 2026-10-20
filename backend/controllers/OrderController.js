@@ -1,4 +1,4 @@
-const Orders = require("../models/OrdersModel");
+const Orders = require("../model/OrdersModel");
 
 module.exports.allOrders = async (req, res) => {
   try {
