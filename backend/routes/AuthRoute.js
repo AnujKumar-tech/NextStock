@@ -1,24 +1,10 @@
-const User = require("../models/UserModel");
-require("dotenv").config();
-const jwt = require("jsonwebtoken");
+const express = require("express");
+const router = express.Router();
+const { Signup, Login } = require("../controllers/AuthController");
+const { userverification } = require("../middlewares/Authmiddleware");
 
-module.exports.userverification = async (req, res) => {
-  const token = req.cookies.token;
-  if (!token) {
-    return res.json({ status: false });
-  }
+router.post("/signup", Signup);
+router.post("/login", Login);
+router.get("/verify", userverification);
 
-  jwt.verify(token, process.env.TOKEN_KEY, async (err, data) => {
-    if (err) {
-      return res.json({ status: false });
-    }
-
-    const user = await User.findById(data.id);
-    if (user) {
-      req.user = { username: user.username };
-      return res.json({ status: true, user: req.user.username });
-    } else {
-      return res.json({ status: false });
-    }
-  });
-};
+module.exports = router;
